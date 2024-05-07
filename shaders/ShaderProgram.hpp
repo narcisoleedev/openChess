@@ -18,4 +18,7 @@ class ShaderProgram{
         void deleteProgram(){
             glDeleteProgram(shaderProgram);
         }
+        unsigned int getProgram(){
+            return shaderProgram;
+        }
 };

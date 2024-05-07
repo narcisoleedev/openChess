@@ -2,6 +2,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <unistd.h>
+
 #include "./shaders/FragShader.hpp"
 #include "./shaders/VertShader.hpp"
 #include "./shaders/ShaderProgram.hpp"
@@ -71,12 +77,27 @@ int main(){
     ebo.unbindBuffer();
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    unsigned int transformLoc = glGetUniformLocation(shaderProgram.getProgram(), "transform");
+    float angle = 0.0f;
     
     while(!glfwWindowShouldClose(window)){
+        if(glfwGetKey(window, GLFW_KEY_UP)==GLFW_PRESS){
+            angle+=0.1f;
+        }
+        if(glfwGetKey(window, GLFW_KEY_DOWN)==GLFW_PRESS){
+            angle-=0.1f;
+        }
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         shaderProgram.useProgram();
         vao.bindVertexArray();
+        glm::vec3 axis(0.0f, 1.0f, 1.0f); // Arbitrary axis, for example, rotating around (1,1,1)
+        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), angle, axis);
+        glm::vec3 translation(0.5f, -0.5f, 0.0f); // Same translation as before
+        glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), translation);
+        glm::mat4 trans = translationMatrix * rotation;
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
         glDrawElements(GL_TRIANGLES, sizeof(board.indices)/sizeof(int), GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);
         glfwPollEvents();

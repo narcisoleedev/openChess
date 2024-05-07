@@ -8,9 +8,10 @@ class VertShader{
                                 "layout (location=0) in vec3 inPos;\n"
                                 "layout (location=1) in vec3 Color;\n"
                                 "out vec3 inColor;\n"
+                                "uniform mat4 transform;\n"
                                 "void main()\n"
                                 "{\n"
-                                "   gl_Position = vec4(inPos.x, inPos.y, inPos.z, 1.0);\n"
+                                "   gl_Position = transform * vec4(inPos.x, inPos.y, inPos.z, 1.0);\n"
                                 "   inColor = Color;\n"
                                 "}\n\0";
         int success;
