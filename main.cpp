@@ -76,28 +76,43 @@ int main(){
     vao.unbindVertexArray();
     ebo.unbindBuffer();
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    unsigned int transformLoc = glGetUniformLocation(shaderProgram.getProgram(), "transform");
-    float angle = 0.0f;
+    glEnable(GL_DEPTH_TEST);
+
+    unsigned int modelLoc = glGetUniformLocation(shaderProgram.getProgram(), "model");
+    unsigned int viewLoc = glGetUniformLocation(shaderProgram.getProgram(), "view");
+    unsigned int projectionLoc = glGetUniformLocation(shaderProgram.getProgram(), "projection");
+
+    //float angle = 0.0f;
+
+    glm::mat4 view = glm::mat4(1.0f);
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.0f));
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
     
     while(!glfwWindowShouldClose(window)){
+        /*
         if(glfwGetKey(window, GLFW_KEY_UP)==GLFW_PRESS){
             angle+=0.1f;
         }
         if(glfwGetKey(window, GLFW_KEY_DOWN)==GLFW_PRESS){
             angle-=0.1f;
         }
+        */
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -0.01f));
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shaderProgram.useProgram();
         vao.bindVertexArray();
-        glm::vec3 axis(0.0f, 1.0f, 1.0f); // Arbitrary axis, for example, rotating around (1,1,1)
-        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), angle, axis);
-        glm::vec3 translation(0.5f, -0.5f, 0.0f); // Same translation as before
-        glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), translation);
-        glm::mat4 trans = translationMatrix * rotation;
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+        //glm::vec3 axis(0.0f, 1.0f, 1.0f); // Arbitrary axis, for example, rotating around (1,1,1)
+        //glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), angle, axis);
+        //glm::vec3 translation(0.5f, -0.5f, 0.0f); // Same translation as before
+        //glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), translation);
+        //glm::mat4 trans = translationMatrix * rotation;
+        glm::mat4 model = glm::mat4(1.0f);
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
         glDrawElements(GL_TRIANGLES, sizeof(board.indices)/sizeof(int), GL_UNSIGNED_INT, 0);
         glfwSwapBuffers(window);
         glfwPollEvents();
