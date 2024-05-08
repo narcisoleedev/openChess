@@ -18,7 +18,37 @@
 
 #include "./obj/Board.hpp"
 
+#include "./debug/debug.hpp"
+
 using namespace std;
+
+glm::mat4 model = glm::mat4(1.0f);
+glm::mat4 view = glm::mat4(1.0f);
+glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+float zoom = 0.0f;
+
+void handleEvents(GLFWwindow *window){
+    if(glfwGetKey(window, GLFW_KEY_UP)==GLFW_PRESS){
+        zoom+=0.1f;
+        projection = glm::perspective(glm::radians(45.0f*zoom), 1.0f, 0.1f, 100.0f);
+    }
+    if(glfwGetKey(window, GLFW_KEY_RIGHT)==GLFW_PRESS){
+        view = glm::translate(view, glm::vec3(0.01f, 0.0f, 0.0f));
+    }
+    if(glfwGetKey(window, GLFW_KEY_LEFT)==GLFW_PRESS){
+        view = glm::translate(view, glm::vec3(-0.01f, 0.0f, 0.0f));
+    }
+    if(glfwGetKey(window, GLFW_KEY_DOWN)==GLFW_PRESS){
+        zoom-=0.1f;
+        projection = glm::perspective(glm::radians(45.0f*zoom), 1.0f, 0.1f, 100.0f);
+    }
+    if(glfwGetKey(window, GLFW_KEY_W)==GLFW_PRESS){
+        view = glm::rotate(view, glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
+    }
+    if(glfwGetKey(window, GLFW_KEY_S)==GLFW_PRESS){
+        view = glm::rotate(view, glm::radians(1.0f), glm::vec3(0.0f, -1.0f, 1.0f));
+    }
+}
 
 int main(){
     glfwInit();
@@ -82,41 +112,32 @@ int main(){
 
     unsigned int modelLoc = glGetUniformLocation(shaderProgram.getProgram(), "model");
     unsigned int viewLoc = glGetUniformLocation(shaderProgram.getProgram(), "view");
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.0f));
     unsigned int projectionLoc = glGetUniformLocation(shaderProgram.getProgram(), "projection");
 
-    //float angle = 0.0f;
-
-    glm::mat4 view = glm::mat4(1.0f);
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.0f));
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+    //glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+    //glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+    //glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+    //debug::printVec3(cameraDirection);
+    //glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+    //glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+    //debug::printVec3(cameraRight);
     
     while(!glfwWindowShouldClose(window)){
-        /*
-        if(glfwGetKey(window, GLFW_KEY_UP)==GLFW_PRESS){
-            angle+=0.1f;
-        }
-        if(glfwGetKey(window, GLFW_KEY_DOWN)==GLFW_PRESS){
-            angle-=0.1f;
-        }
-        */
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -0.01f));
-        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+        handleEvents(window);
+        glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shaderProgram.useProgram();
         vao.bindVertexArray();
-        //glm::vec3 axis(0.0f, 1.0f, 1.0f); // Arbitrary axis, for example, rotating around (1,1,1)
-        //glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), angle, axis);
-        //glm::vec3 translation(0.5f, -0.5f, 0.0f); // Same translation as before
-        //glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), translation);
-        //glm::mat4 trans = translationMatrix * rotation;
-        glm::mat4 model = glm::mat4(1.0f);
+        //glm::mat4 res = model*view*projection;
+        //debug::printMatrix(res);
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
         glDrawElements(GL_TRIANGLES, sizeof(board.indices)/sizeof(int), GL_UNSIGNED_INT, 0);
+        vao.unbindVertexArray();
         glfwSwapBuffers(window);
         glfwPollEvents();
-        vao.unbindVertexArray();
     }
     vao.deleteVertexArrays();
     vbo.deleteBuffers();

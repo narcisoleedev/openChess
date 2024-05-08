@@ -160,4 +160,46 @@ public:
     }
 };
 
+/*
+#include <iostream>
+#include <vector>
 
+using namespace std;
+
+class Board {
+    public:
+        float vertices[24] = {
+                -0.1f, -0.1f, -0.1f,
+                0.1f, -0.1f, -0.1f,
+                0.1f, 0.1f, -0.1f,
+                0.1f, -0.1f, -0.1f,
+                -0.1f, -0.1f, 0.1f,
+                0.1f, -0.1f, 0.1f,
+                0.1f, 0.1f, 0.1f,
+                0.1f, -0.1f, 0.1f,
+        };
+        float colors[24]= {
+                1.0f, 1.0f, 1.0f,
+                1.0f, 1.0f, 1.0f,
+                1.0f, 1.0f, 1.0f,
+                1.0f, 1.0f, 1.0f,
+                0.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 0.0f,
+                
+        };
+        int indices[24]= {
+                0, 1, 2,
+                2, 3, 0,
+                0, 3, 4,
+                3, 4, 7,
+                1, 5, 2,
+                2, 5, 6,
+                4, 5, 6,
+                6, 7, 4
+        };
+        Board(){
+            
+        }
+};*/
