@@ -1,6 +1,8 @@
 .vscode
+
+glad.c
 openChess
 
-folders
+#folders
 
 ./model/model.hpp
