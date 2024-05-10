@@ -24,4 +24,7 @@ class VBO{
         void deleteBuffers(){
             glDeleteBuffers(1, &vbo);
         }
+        unsigned int getVbo(){
+            return vbo;
+        }
 };

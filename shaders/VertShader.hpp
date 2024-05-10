@@ -13,8 +13,7 @@ class VertShader{
                                 "uniform mat4 projection;\n"
                                 "void main()\n"
                                 "{\n"
-                                "   gl_Position = model * view * projection * vec4(inPos, 1.0);\n"
-                                //"   gl_Position = model * projection * vec4(inPos, 1.0);\n"
+                                "   gl_Position = projection * view * model * vec4(inPos, 1.0);\n"
                                 "   inColor = Color;\n"
                                 "}\n\0";
         int success;

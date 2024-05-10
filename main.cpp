@@ -18,35 +18,39 @@
 
 #include "./obj/Board.hpp"
 
+#include "./camera/camera.hpp"
+
 #include "./debug/debug.hpp"
 
 using namespace std;
 
-glm::mat4 model = glm::mat4(1.0f);
-glm::mat4 view = glm::mat4(1.0f);
-glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
-float zoom = 0.0f;
-
 void handleEvents(GLFWwindow *window){
+    
     if(glfwGetKey(window, GLFW_KEY_UP)==GLFW_PRESS){
-        zoom+=0.1f;
-        projection = glm::perspective(glm::radians(45.0f*zoom), 1.0f, 0.1f, 100.0f);
+        view = glm::translate(view, glm::vec3(0.0f, -0.01f, 0.0f));
     }
-    if(glfwGetKey(window, GLFW_KEY_RIGHT)==GLFW_PRESS){
-        view = glm::translate(view, glm::vec3(0.01f, 0.0f, 0.0f));
-    }
-    if(glfwGetKey(window, GLFW_KEY_LEFT)==GLFW_PRESS){
+    else if(glfwGetKey(window, GLFW_KEY_RIGHT)==GLFW_PRESS){
         view = glm::translate(view, glm::vec3(-0.01f, 0.0f, 0.0f));
     }
-    if(glfwGetKey(window, GLFW_KEY_DOWN)==GLFW_PRESS){
-        zoom-=0.1f;
+    else if(glfwGetKey(window, GLFW_KEY_LEFT)==GLFW_PRESS){
+        view = glm::translate(view, glm::vec3(0.01f, 0.0f, 0.0f));
+    }
+    else if(glfwGetKey(window, GLFW_KEY_DOWN)==GLFW_PRESS){
+        view = glm::translate(view, glm::vec3(0.0f, 0.01f, 0.0f));
+    }
+    else if(glfwGetKey(window, GLFW_KEY_S)==GLFW_PRESS){
+        zoom-=0.01f;
+        if(zoom<=0.1f){
+            zoom=0.1f;
+        }
         projection = glm::perspective(glm::radians(45.0f*zoom), 1.0f, 0.1f, 100.0f);
     }
-    if(glfwGetKey(window, GLFW_KEY_W)==GLFW_PRESS){
-        view = glm::rotate(view, glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 1.0f));
-    }
-    if(glfwGetKey(window, GLFW_KEY_S)==GLFW_PRESS){
-        view = glm::rotate(view, glm::radians(1.0f), glm::vec3(0.0f, -1.0f, 1.0f));
+    else if(glfwGetKey(window, GLFW_KEY_W)==GLFW_PRESS){
+        zoom+=0.01f;
+        if(zoom>=3){
+            zoom=3.0f;
+        }
+        projection = glm::perspective(glm::radians(45.0f*zoom), 1.0f, 0.1f, 100.0f);
     }
 }
 
@@ -106,42 +110,89 @@ int main(){
     vao.unbindVertexArray();
     ebo.unbindBuffer();
 
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    float vertices[21] = {
+        0.0f, 0.0f, 0.0f, 
+        10.0f, 0.0f, 0.0f,
+        0.0f, 10.0f, 0.0f,
+        0.0f, 0.0f, 10.0f,
+        -10.0f, 0.0f, 0.0f,
+        0.0f, -10.0f, 0.0f,
+        0.0f, 0.0f, -10.0f,
+    };
+    float colors[21] = {
+        1.0f, 1.0f, 1.0f,
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
+    };
+    int cord[12] = {
+        0, 1, 
+        0, 2,
+        0, 3,
+        0, 4, 
+        0, 5,
+        0, 6
+    };
+
+    VAO vaoL;
+    VBO vboL;
+    EBO eboL;
+
+    vaoL.genVertexArrays(1);
+    vboL.genBuffer();
+    eboL.genBuffer();
+    vaoL.bindVertexArray();
+    vboL.bindBuffer();
+    vboL.bufferData(sizeof(vertices)+sizeof(colors), GL_STATIC_DRAW);
+    vboL.bufferSubData(0, sizeof(vertices), vertices);
+    vboL.bufferSubData(sizeof(vertices), sizeof(colors), colors);
+    eboL.bindBuffer();
+    eboL.bufferData(sizeof(cord), cord, GL_STATIC_DRAW);
+    vaoL.vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+    vaoL.enableVertexArray(0);
+    vaoL.vertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)(sizeof(vertices)));
+    vaoL.enableVertexArray(1);
+    vboL.unbindBuffer();
+    vaoL.unbindVertexArray();
+    eboL.unbindBuffer();
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     glEnable(GL_DEPTH_TEST);
 
     unsigned int modelLoc = glGetUniformLocation(shaderProgram.getProgram(), "model");
     unsigned int viewLoc = glGetUniformLocation(shaderProgram.getProgram(), "view");
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.0f));
     unsigned int projectionLoc = glGetUniformLocation(shaderProgram.getProgram(), "projection");
-
-    //glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-    //glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-    //glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-    //debug::printVec3(cameraDirection);
-    //glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    //glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-    //debug::printVec3(cameraRight);
     
     while(!glfwWindowShouldClose(window)){
         handleEvents(window);
-        glClearColor(0.5f, 0.0f, 0.5f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shaderProgram.useProgram();
-        vao.bindVertexArray();
-        //glm::mat4 res = model*view*projection;
-        //debug::printMatrix(res);
+
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+        vao.bindVertexArray();
         glDrawElements(GL_TRIANGLES, sizeof(board.indices)/sizeof(int), GL_UNSIGNED_INT, 0);
         vao.unbindVertexArray();
+
+        vaoL.bindVertexArray();
+        glDrawElements(GL_LINES, sizeof(cord)/sizeof(int), GL_UNSIGNED_INT, 0);
+        vaoL.unbindVertexArray();
+        
+        cout << zoom << endl;
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
     vao.deleteVertexArrays();
     vbo.deleteBuffers();
-    vbo.deleteBuffers();
+    ebo.deleteBuffers();
     shaderProgram.deleteProgram();
     glfwDestroyWindow(window);
     glfwTerminate();
