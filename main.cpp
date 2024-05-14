@@ -17,6 +17,8 @@
 #include "./buffers/EBO.hpp"
 
 #include "./obj/Board.hpp"
+#include "./obj/Lines.hpp"
+#include "./obj/Cube.hpp"
 
 #include "./camera/camera.hpp"
 
@@ -110,7 +112,10 @@ int main(){
     vao.unbindVertexArray();
     ebo.unbindBuffer();
 
-    float vertices[21] = {
+    Lines lines;
+    Cube cube;
+
+    /*float vertices[21] = {
         0.0f, 0.0f, 0.0f, 
         10.0f, 0.0f, 0.0f,
         0.0f, 10.0f, 0.0f,
@@ -157,7 +162,7 @@ int main(){
     vaoL.enableVertexArray(1);
     vboL.unbindBuffer();
     vaoL.unbindVertexArray();
-    eboL.unbindBuffer();
+    eboL.unbindBuffer();*/
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -181,18 +186,20 @@ int main(){
         glDrawElements(GL_TRIANGLES, sizeof(board.indices)/sizeof(int), GL_UNSIGNED_INT, 0);
         vao.unbindVertexArray();
 
-        vaoL.bindVertexArray();
+        lines.renderLines();
+        cube.renderCube();
+        /*vaoL.bindVertexArray();
         glDrawElements(GL_LINES, sizeof(cord)/sizeof(int), GL_UNSIGNED_INT, 0);
-        vaoL.unbindVertexArray();
+        vaoL.unbindVertexArray();*/
         
         cout << zoom << endl;
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-    vao.deleteVertexArrays();
+    /*vao.deleteVertexArrays();
     vbo.deleteBuffers();
-    ebo.deleteBuffers();
+    ebo.deleteBuffers();*/
     shaderProgram.deleteProgram();
     glfwDestroyWindow(window);
     glfwTerminate();
