@@ -72,11 +72,15 @@ class Cube{
     Cube(){
         initCube();
     }
-    void renderCube()
-    {
+    void renderCube(){
         vao.bindVertexArray();
         glDrawElements(GL_TRIANGLES, sizeof(cord)/sizeof(int), GL_UNSIGNED_INT, 0);
         vao.unbindVertexArray();
     }
-
+    
+    void deleteCube(){
+        vao.deleteVertexArrays();
+        vbo.deleteBuffers();
+        ebo.deleteBuffers();
+    }
 };

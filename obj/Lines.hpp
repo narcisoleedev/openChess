@@ -64,11 +64,16 @@ class Lines{
     Lines(){
         initLines();
     }
-    void renderLines()
-    {
+    void renderLines(){
         vao.bindVertexArray();
         glDrawElements(GL_LINES, sizeof(cord)/sizeof(int), GL_UNSIGNED_INT, 0);
         vao.unbindVertexArray();
+    }
+    
+    void deleteLines(){
+        vao.deleteVertexArrays();
+        vbo.deleteBuffers();
+        ebo.deleteBuffers();
     }
 
 };
