@@ -22,6 +22,8 @@
 
 #include "./camera/camera.hpp"
 
+#include "./lighting/Lighting.hpp"
+
 #include "./debug/debug.hpp"
 
 using namespace std;
@@ -95,6 +97,11 @@ int main(){
     unsigned int modelLoc = glGetUniformLocation(shaderProgram.getProgram(), "model");
     unsigned int viewLoc = glGetUniformLocation(shaderProgram.getProgram(), "view");
     unsigned int projectionLoc = glGetUniformLocation(shaderProgram.getProgram(), "projection");
+
+    Lighting lighting(0.1f, {0.0f, 5.0f, 0.0f});
+    unsigned int ambientStrenghtLoc = glGetUniformLocation(shaderProgram.getProgram(), "ambientStrength");
+    unsigned int lightColorLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightColor");
+    unsigned int lightPosLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightPos");
     
     while(!glfwWindowShouldClose(window)){
         handleEvents(window);
@@ -106,11 +113,15 @@ int main(){
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
+        glUniform3fv(ambientStrenghtLoc, 1, glm::value_ptr(lighting.getAmbientStrenght()));
+        glUniform3fv(lightColorLoc, 1, glm::value_ptr(lighting.getLightColor()));
+        glUniform3fv(lightPosLoc, 1, glm::value_ptr(lighting.getLightPos()));
+
         lines.renderLines();
         //board.renderBoard();
         cube.renderCube();
         
-        cout << zoom << endl;
+        //cout << zoom << endl;
 
         glfwSwapBuffers(window);
         glfwPollEvents();

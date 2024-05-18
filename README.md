@@ -4,8 +4,23 @@ It's a chess game made in OpenGL/C++ using GLFW and GLAD.
 
 ### To do:
 
-- Create the chess object and make it render.
-- Make the scene rotate by using GLFW_POLL_EVENTS(). // Partially done
-- Add a texture to the chess board.
-- Create a directional light
-- Add piece models
+#### Camera:
+    - Init Model, View, Projection (DONE)
+    - Move left, right, up and down (DONE)
+    - Zoom in and out (DONE)
+    - Rotate with mouse (DONE)
+
+#### Lighting:
+    - Ambient Lighting (DONE)
+    - Diffuse Light (DOING)
+    - Specular Light (TO DO)
+
+#### Model:
+    - Create model class (TO DO)
+    - Import chess model (TO DO)
+
+#### Wrapping up:
+    - Organize makefile (TO DO)
+    - Organize and comment code (TO DO)
+    - Create cmake file (TO DO)
+    - Finish readme (TO DO)
