@@ -89,7 +89,7 @@ int main(){
     fragShader.deleteShader();
 
     //Board board;
-    Lines lines;
+    //Lines lines;
     Cube cube;
 
     glEnable(GL_DEPTH_TEST);
@@ -98,7 +98,7 @@ int main(){
     unsigned int viewLoc = glGetUniformLocation(shaderProgram.getProgram(), "view");
     unsigned int projectionLoc = glGetUniformLocation(shaderProgram.getProgram(), "projection");
 
-    Lighting lighting(0.1f, {0.0f, 5.0f, 0.0f});
+    Lighting lighting(0.1f, {0.0f, -5.0f, 5.0f});
     unsigned int ambientStrenghtLoc = glGetUniformLocation(shaderProgram.getProgram(), "ambientStrength");
     unsigned int lightColorLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightColor");
     unsigned int lightPosLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightPos");
@@ -117,7 +117,7 @@ int main(){
         glUniform3fv(lightColorLoc, 1, glm::value_ptr(lighting.getLightColor()));
         glUniform3fv(lightPosLoc, 1, glm::value_ptr(lighting.getLightPos()));
 
-        lines.renderLines();
+        //lines.renderLines();
         //board.renderBoard();
         cube.renderCube();
         
