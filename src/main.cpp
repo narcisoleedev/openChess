@@ -98,7 +98,7 @@ int main(){
     unsigned int viewLoc = glGetUniformLocation(shaderProgram.getProgram(), "view");
     unsigned int projectionLoc = glGetUniformLocation(shaderProgram.getProgram(), "projection");
 
-    Lighting lighting(0.1f, {0.0f, -5.0f, 5.0f});
+    Lighting lighting(0.1f, {0.0f, 0.0f, 5.0f});
     unsigned int ambientStrenghtLoc = glGetUniformLocation(shaderProgram.getProgram(), "ambientStrength");
     unsigned int lightColorLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightColor");
     unsigned int lightPosLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightPos");
