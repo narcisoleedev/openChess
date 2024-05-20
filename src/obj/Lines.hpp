@@ -16,6 +16,16 @@ class Lines{
         0.0f, -10.0f, 0.0f,
         0.0f, 0.0f, -10.0f,
     };
+    
+    float normals[21] = {
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,
+    };
 
     float colors[21] = {
         1.0f, 1.0f, 1.0f,
@@ -46,15 +56,18 @@ class Lines{
         ebo.genBuffer();
         vao.bindVertexArray();
         vbo.bindBuffer();
-        vbo.bufferData(sizeof(vertices)+sizeof(colors), GL_STATIC_DRAW);
+        vbo.bufferData(sizeof(vertices)+sizeof(normals)+sizeof(colors), GL_STATIC_DRAW);
         vbo.bufferSubData(0, sizeof(vertices), vertices);
-        vbo.bufferSubData(sizeof(vertices), sizeof(colors), colors);
+        vbo.bufferSubData(sizeof(vertices), sizeof(normals), normals);
+        vbo.bufferSubData(sizeof(vertices)+sizeof(normals), sizeof(colors), colors);
         ebo.bindBuffer();
         ebo.bufferData(sizeof(cord), cord, GL_STATIC_DRAW);
         vao.vertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
         vao.enableVertexArray(0);
         vao.vertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)(sizeof(vertices)));
         vao.enableVertexArray(1);
+        vao.vertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)(sizeof(vertices)+sizeof(normals)));
+        vao.enableVertexArray(2);
         vbo.unbindBuffer();
         vao.unbindVertexArray();
         ebo.unbindBuffer();
