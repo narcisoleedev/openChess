@@ -13,6 +13,7 @@ class FragShader{
             "uniform vec3 ambientStrength;\n"
             "uniform vec3 lightColor;\n"
             "uniform vec3 lightPos;\n"
+            "uniform vec3 viewPos;\n"
             "void main()\n"
             "{\n"
             "   //Calculate diffuseLighting\n"
@@ -20,11 +21,18 @@ class FragShader{
             "   float diff = max(dot(normal, lightPos), 0.0);\n"
             "   vec3 diffuseColor = diff * lightColor;\n"
             "\n"
+            "   //Calculate specularLighting\n"
+            "   float specularStrength = 1.0;\n"
+            "   vec3 viewDir = normalize(viewPos - localPos);\n"
+            "   vec3 reflectDir = reflect(-normLightPos, normal);\n"
+            "   float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64);\n"
+            "   vec3 specular = specularStrength * spec * lightColor;\n"
+            "\n"
             "   //Calculate ambientColor\n"
             "   vec3 ambientColor = ambientStrength * lightColor;\n"
             "\n"
             "   //Calculate FragColor\n"
-            "   FragColor = vec4((ambientColor + diffuseColor) * objectColor, 1.0);\n"
+            "   FragColor = vec4((ambientColor + diffuseColor + specular) * objectColor, 1.0);\n"
             "}\n\0";
 
         int success;

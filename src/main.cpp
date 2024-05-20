@@ -102,6 +102,7 @@ int main(){
     unsigned int ambientStrenghtLoc = glGetUniformLocation(shaderProgram.getProgram(), "ambientStrength");
     unsigned int lightColorLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightColor");
     unsigned int lightPosLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightPos");
+    unsigned int viewPosLoc = glGetUniformLocation(shaderProgram.getProgram(), "viewPos");
     
     while(!glfwWindowShouldClose(window)){
         handleEvents(window);
@@ -116,6 +117,7 @@ int main(){
         glUniform3fv(ambientStrenghtLoc, 1, glm::value_ptr(lighting.getAmbientStrenght()));
         glUniform3fv(lightColorLoc, 1, glm::value_ptr(lighting.getLightColor()));
         glUniform3fv(lightPosLoc, 1, glm::value_ptr(lighting.getLightPos()));
+        glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPos));
 
         //lines.renderLines();
         //board.renderBoard();
