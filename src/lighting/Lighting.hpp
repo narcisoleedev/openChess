@@ -10,8 +10,8 @@ class Lighting{
     private:
         float ambientStrength;
         glm::vec3 lightColor;
-        glm::vec3 lightPos;
     public:
+        glm::vec3 lightPos;
         Lighting(float ambientStrenght, glm::vec3 lightPos){
             this->ambientStrength = ambientStrenght;
             lightColor = glm::vec3(1.0f, 1.0f, 1.0f);

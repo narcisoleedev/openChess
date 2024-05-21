@@ -30,18 +30,22 @@ using namespace std;
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {}
 
-void handleEvents(GLFWwindow *window){
+void handleEvents(GLFWwindow *window, Lighting lighting, unsigned int lightPosLoc){
     
     if(glfwGetKey(window, GLFW_KEY_UP)==GLFW_PRESS){
+        //lighting.lightPos = (lighting.lightPos+glm::vec3(0.0f, 0.01f, 0.0f));
         view = glm::translate(view, glm::vec3(0.0f, -0.01f, 0.0f));
     }
     else if(glfwGetKey(window, GLFW_KEY_RIGHT)==GLFW_PRESS){
+        //lighting.lightPos = (lighting.lightPos+glm::vec3(0.01f, 0.0f, 0.0f));
         view = glm::translate(view, glm::vec3(-0.01f, 0.0f, 0.0f));
     }
     else if(glfwGetKey(window, GLFW_KEY_LEFT)==GLFW_PRESS){
+        //lighting.lightPos = (lighting.lightPos+glm::vec3(-0.01f, 0.0f, 0.0f));
         view = glm::translate(view, glm::vec3(0.01f, 0.0f, 0.0f));
     }
     else if(glfwGetKey(window, GLFW_KEY_DOWN)==GLFW_PRESS){
+        //lighting.lightPos = (lighting.lightPos+glm::vec3(0.0f, -0.01f, 0.0f));
         view = glm::translate(view, glm::vec3(0.0f, 0.01f, 0.0f));
     }
     else if(glfwGetKey(window, GLFW_KEY_S)==GLFW_PRESS){
@@ -58,6 +62,7 @@ void handleEvents(GLFWwindow *window){
         }
         projection = glm::perspective(glm::radians(45.0f*zoom), 1.0f, 0.1f, 100.0f);
     }
+    glUniform3fv(lightPosLoc, 1, glm::value_ptr(lighting.getLightPos()));
 }
 
 int main(){
@@ -89,7 +94,7 @@ int main(){
     fragShader.deleteShader();
 
     //Board board;
-    //Lines lines;
+    Lines lines;
     Cube cube;
 
     glEnable(GL_DEPTH_TEST);
@@ -98,14 +103,14 @@ int main(){
     unsigned int viewLoc = glGetUniformLocation(shaderProgram.getProgram(), "view");
     unsigned int projectionLoc = glGetUniformLocation(shaderProgram.getProgram(), "projection");
 
-    Lighting lighting(0.1f, {0.0f, 0.0f, 5.0f});
+    Lighting lighting(0.1f, {1.0f, 0.5f, 1.0f});
     unsigned int ambientStrenghtLoc = glGetUniformLocation(shaderProgram.getProgram(), "ambientStrength");
     unsigned int lightColorLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightColor");
     unsigned int lightPosLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightPos");
     unsigned int viewPosLoc = glGetUniformLocation(shaderProgram.getProgram(), "viewPos");
     
     while(!glfwWindowShouldClose(window)){
-        handleEvents(window);
+        handleEvents(window, lighting, lightPosLoc);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shaderProgram.useProgram();
@@ -119,7 +124,7 @@ int main(){
         glUniform3fv(lightPosLoc, 1, glm::value_ptr(lighting.getLightPos()));
         glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPos));
 
-        //lines.renderLines();
+        lines.renderLines();
         //board.renderBoard();
         cube.renderCube();
         
