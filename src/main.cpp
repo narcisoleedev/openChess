@@ -59,6 +59,7 @@ void handleEvents(GLFWwindow *window, Lighting lighting, unsigned int lightPosLo
             zoom=3.0f;
         }
     }
+    projection = glm::perspective(glm::radians(45.0f * zoom), 1.0f, 0.1f, 100.0f);
 }
 
 int main(){
@@ -132,7 +133,7 @@ int main(){
         lines.renderLines();
         cube.renderCube();
         
-        //cout << zoom << endl;
+        cout << zoom << endl;
 
         //Swap buffers and get pool events.
         glfwSwapBuffers(window);
