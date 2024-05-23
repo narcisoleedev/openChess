@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <glad/glad.h>
 
@@ -5,9 +7,10 @@ class ShaderProgram{
     private:
         int shaderProgram;
     public:
-        ShaderProgram(){};
-        void attachShader(unsigned int vertexShader, unsigned int fragmentShader){ 
+        ShaderProgram(){
             shaderProgram = glCreateProgram();
+        };
+        void attachShader(unsigned int vertexShader, unsigned int fragmentShader){ 
             glAttachShader(shaderProgram, vertexShader);
             glAttachShader(shaderProgram, fragmentShader);
             glLinkProgram(shaderProgram);

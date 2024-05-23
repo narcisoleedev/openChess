@@ -1,9 +1,20 @@
+#pragma once
+
 #include <iostream>
+#include <vector>
+#include <string>
+
 #include <glad/glad.h>
+
+
+using namespace std;
 
 class FragShader{
     private:
         unsigned int fragmentShader;
+        string filePath;
+        string fragmentShaderString;
+
         const char* fragmentShaderSource = 
             "#version 330 core\n"
             "in vec3 localPos;\n"
@@ -37,18 +48,20 @@ class FragShader{
 
         int success;
         char infoLog[512];
+
     public:
-        FragShader(){}
+        FragShader(string filePath){
+            this->filePath = filePath;
+        }
         unsigned int compileShader(){
             fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fragmentShader,1, &fragmentShaderSource, NULL);
+            glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
             glCompileShader(fragmentShader);
             glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
             if(!success)
             {
-            glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" <<
-            infoLog << std::endl;
+                glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+                std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
             }
             return fragmentShader;
         }
