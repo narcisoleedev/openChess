@@ -29,7 +29,7 @@
 
 using namespace std;
 
-string glslPath = "./glsl/";
+string glslPath = "/src/glsl/";
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos){}
 
@@ -84,12 +84,10 @@ int main(){
     glfwSetCursorPosCallback(window, mouse_callback);
 
     //Init the program with standart shaders (3D).
-    VertShader vertShader(glslPath + "fragmentShader.glsl");
-    FragShader fragShader(glslPath + "vertexShader.glsl");
-
+    VertShader vertShader(glslPath + "vertexShader.glsl");
+    FragShader fragShader(glslPath + "fragmentShader.glsl");
     ShaderProgram shaderProgram;
     shaderProgram.attachShader(vertShader.compileShader(), fragShader.compileShader());
-
     vertShader.deleteShader();
     fragShader.deleteShader();
 
@@ -130,10 +128,10 @@ int main(){
         glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPos));
 
         //Render objects.
-        lines.renderLines();
         cube.renderCube();
+        lines.renderLines();
         
-        cout << zoom << endl;
+        //cout << zoom << endl;
 
         //Swap buffers and get pool events.
         glfwSwapBuffers(window);

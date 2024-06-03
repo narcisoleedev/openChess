@@ -143,8 +143,8 @@ class Cube{
     }
 
     void initCube(){
-        VertShader vertexShader("");
-        FragShader fragShader("");
+        VertShader vertexShader("/src/glsl/vertexShader.glsl");
+        FragShader fragShader("/src/glsl/fragmentShader.glsl");
         objectShader(vertexShader, fragShader);
         vao.genVertexArrays(1);
         vbo.genBuffer();

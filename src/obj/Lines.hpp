@@ -63,8 +63,8 @@ class Lines{
     }
 
     void initLines(){
-        VertShader vertexShader("");
-        FragShader fragShader("");
+        VertShader vertexShader("/src/glsl/vertexShaderLines.glsl");
+        FragShader fragShader("/src/glsl/fragmentShaderLines.glsl");
         objectShader(vertexShader, fragShader);
         vao.genVertexArrays(1);
         vbo.genBuffer();
