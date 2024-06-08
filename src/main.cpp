@@ -96,6 +96,7 @@ int main(){
     Cube cube;
 
     glEnable(GL_DEPTH_TEST); //Enable z-buffer.
+   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     //Get camera uniform locations.
     unsigned int modelLoc = glGetUniformLocation(shaderProgram.getProgram(), "model");
@@ -129,6 +130,18 @@ int main(){
 
         //Render objects.
         cube.renderCube();
+
+        //Camera uniforms.
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+        //Lighting uniforms.
+        glUniform3fv(ambientStrenghtLoc, 1, glm::value_ptr(lighting.getAmbientStrenght()));
+        glUniform3fv(lightColorLoc, 1, glm::value_ptr(lighting.getLightColor()));
+        glUniform3fv(lightPosLoc, 1, glm::value_ptr(lighting.getLightPos()));
+        glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPos));
+
         lines.renderLines();
         
         //cout << zoom << endl;
