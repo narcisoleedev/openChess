@@ -9,6 +9,9 @@
 #include "../buffers/VBO.hpp"
 #include "../buffers/EBO.hpp"
 
+#include "../camera/camera.hpp"
+#include "../lighting/Lighting.hpp"
+
 class Lines{
     private:
     float vertices[21] = {
@@ -84,13 +87,36 @@ class Lines{
         vao.unbindVertexArray();
         ebo.unbindBuffer();
     }
-    
+    void uniforms(Camera& camera, Lighting& lighting){
+        //Get lighting uniform locations.
+        unsigned int ambientStrenghtLoc = glGetUniformLocation(shaderProgram.getProgram(), "ambientStrength");
+        unsigned int lightColorLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightColor");
+        unsigned int lightPosLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightPos");
+        unsigned int viewPosLoc = glGetUniformLocation(shaderProgram.getProgram(), "viewPos");
+
+        unsigned int modelLoc = glGetUniformLocation(shaderProgram.getProgram(), "model");
+        unsigned int viewLoc = glGetUniformLocation(shaderProgram.getProgram(), "view");
+        unsigned int projectionLoc = glGetUniformLocation(shaderProgram.getProgram(), "projection");
+
+        //Camera uniforms.
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(camera.model));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(camera.view));
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(camera.projection));
+
+        //Lighting uniforms.
+        glUniform3fv(ambientStrenghtLoc, 1, glm::value_ptr(lighting.getAmbientStrenght()));
+        glUniform3fv(lightColorLoc, 1, glm::value_ptr(lighting.getLightColor()));
+        glUniform3fv(lightPosLoc, 1, glm::value_ptr(lighting.getLightPos()));
+        glUniform3fv(viewPosLoc, 1, glm::value_ptr(camera.cameraPos));
+
+    }   
     public:
         Lines(){
             initLines();
         }
-        void renderLines(){
+        void renderLines(Camera& camera, Lighting& lighting){
             shaderProgram.useProgram();
+            uniforms(camera, lighting);
             vao.bindVertexArray();
             glDrawElements(GL_LINES, sizeof(cord)/sizeof(int), GL_UNSIGNED_INT, 0);
             vao.unbindVertexArray();

@@ -33,33 +33,33 @@ string glslPath = "/src/glsl/";
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos){}
 
-void handleEvents(GLFWwindow *window, Lighting lighting, unsigned int lightPosLoc){
+void handleEvents(GLFWwindow *window, Camera& camera, Lighting& lighting){
     
     if(glfwGetKey(window, GLFW_KEY_UP)==GLFW_PRESS){//Move camera below
-        view = glm::translate(view, glm::vec3(0.0f, -0.01f, 0.0f));
+        camera.view = glm::translate(camera.view, glm::vec3(0.0f, -0.01f, 0.0f));
     }
     else if(glfwGetKey(window, GLFW_KEY_RIGHT)==GLFW_PRESS){
-        view = glm::translate(view, glm::vec3(-0.01f, 0.0f, 0.0f));//Move camera to the right
+        camera.view = glm::translate(camera.view, glm::vec3(-0.01f, 0.0f, 0.0f));//Move camera to the right
     }
     else if(glfwGetKey(window, GLFW_KEY_LEFT)==GLFW_PRESS){
-        view = glm::translate(view, glm::vec3(0.01f, 0.0f, 0.0f));//Move camera to the left
+        camera.view = glm::translate(camera.view, glm::vec3(0.01f, 0.0f, 0.0f));//Move camera to the left
     }
     else if(glfwGetKey(window, GLFW_KEY_DOWN)==GLFW_PRESS){
-        view = glm::translate(view, glm::vec3(0.0f, 0.01f, 0.0f));//Move camera up
+        camera.view = glm::translate(camera.view, glm::vec3(0.0f, 0.01f, 0.0f));//Move camera up
     }
     else if(glfwGetKey(window, GLFW_KEY_S)==GLFW_PRESS){//Zoom OUT
-        zoom-=0.01f;
-        if(zoom<=0.1f){
-            zoom=0.1f;
+        camera.zoom-=0.01f;
+        if(camera.zoom<=0.1f){
+            camera.zoom=0.1f;
         }
     }
     else if(glfwGetKey(window, GLFW_KEY_W)==GLFW_PRESS){//Zoom IN
-        zoom+=0.01f;
-        if(zoom>=3){
-            zoom=3.0f;
+        camera.zoom+=0.01f;
+        if(camera.zoom>=3){
+            camera.zoom=3.0f;
         }
     }
-    projection = glm::perspective(glm::radians(45.0f * zoom), 1.0f, 0.1f, 100.0f);
+    camera.projection = glm::perspective(glm::radians(45.0f * camera.zoom), 1.0f, 0.1f, 100.0f);
 }
 
 int main(){
@@ -83,66 +83,25 @@ int main(){
     glViewport(0, 0, 800, 800);
     glfwSetCursorPosCallback(window, mouse_callback);
 
-    //Init the program with standart shaders (3D).
-    VertShader vertShader(glslPath + "vertexShader.glsl");
-    FragShader fragShader(glslPath + "fragmentShader.glsl");
-    ShaderProgram shaderProgram;
-    shaderProgram.attachShader(vertShader.compileShader(), fragShader.compileShader());
-    vertShader.deleteShader();
-    fragShader.deleteShader();
-
     //Init objects.
     Lines lines;
     Cube cube;
 
     glEnable(GL_DEPTH_TEST); //Enable z-buffer.
-   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    //Get camera uniform locations.
-    unsigned int modelLoc = glGetUniformLocation(shaderProgram.getProgram(), "model");
-    unsigned int viewLoc = glGetUniformLocation(shaderProgram.getProgram(), "view");
-    unsigned int projectionLoc = glGetUniformLocation(shaderProgram.getProgram(), "projection");
-
-    //Get lighting uniform locations.
-    unsigned int ambientStrenghtLoc = glGetUniformLocation(shaderProgram.getProgram(), "ambientStrength");
-    unsigned int lightColorLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightColor");
-    unsigned int lightPosLoc = glGetUniformLocation(shaderProgram.getProgram(), "lightPos");
-    unsigned int viewPosLoc = glGetUniformLocation(shaderProgram.getProgram(), "viewPos");
-    
+    Camera camera;
     Lighting lighting(0.1f, {1.0f, 0.5f, 1.0f});
 
     while(!glfwWindowShouldClose(window)){
-        handleEvents(window, lighting, lightPosLoc);    //Handle events.
+        handleEvents(window, camera, lighting);    //Handle events.
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);   //Set color buffer to black.
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear color buffer and z-buffer.
         //shaderProgram.useProgram(); //Use program.
 
-        //Camera uniforms.
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-        //Lighting uniforms.
-        glUniform3fv(ambientStrenghtLoc, 1, glm::value_ptr(lighting.getAmbientStrenght()));
-        glUniform3fv(lightColorLoc, 1, glm::value_ptr(lighting.getLightColor()));
-        glUniform3fv(lightPosLoc, 1, glm::value_ptr(lighting.getLightPos()));
-        glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPos));
-
         //Render objects.
-        cube.renderCube();
-
-        //Camera uniforms.
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-        //Lighting uniforms.
-        glUniform3fv(ambientStrenghtLoc, 1, glm::value_ptr(lighting.getAmbientStrenght()));
-        glUniform3fv(lightColorLoc, 1, glm::value_ptr(lighting.getLightColor()));
-        glUniform3fv(lightPosLoc, 1, glm::value_ptr(lighting.getLightPos()));
-        glUniform3fv(viewPosLoc, 1, glm::value_ptr(cameraPos));
-
-        lines.renderLines();
+        cube.renderCube(camera, lighting);
+        lines.renderLines(camera, lighting);
         
         //cout << zoom << endl;
 
@@ -151,7 +110,8 @@ int main(){
         glfwPollEvents();
     }
     //Delete objects and program.
-    shaderProgram.deleteProgram();
+    cube.deleteCube();
+    lines.deleteLines();
 
     //Destroy window and terminate GLFW.
     glfwDestroyWindow(window);
