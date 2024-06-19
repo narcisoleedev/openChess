@@ -9,6 +9,8 @@
 
 #include <unistd.h>
 
+#include "../libs/stb_image.h"
+
 #include "./shaders/FragShader.hpp"
 #include "./shaders/VertShader.hpp"
 #include "./shaders/ShaderProgram.hpp"
@@ -27,9 +29,13 @@
 
 #include "./debug/debug.hpp"
 
+#include "./model/Model.hpp"
+
 using namespace std;
 
 string glslPath = "/src/glsl/";
+
+char * resourcesPath = "/src/resources/objects/backpack/backpack.obj";
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos){}
 
@@ -79,11 +85,14 @@ int main(){
         return -1;
     }
 
+    stbi_set_flip_vertically_on_load(true);
+
     //Set window coordinates.
     glViewport(0, 0, 800, 800);
     glfwSetCursorPosCallback(window, mouse_callback);
 
-    Model ourModel(FileSystem::getPath("resources/objects/backpack/backpack.obj"));
+
+    Model ourModel(resourcesPath);
     VertShader vertexShader(glslPath + "vertexShader.glsl");
     FragShader fragShader(glslPath + "fragmentShader.glsl");
     ShaderProgram shaderProgram;
@@ -107,6 +116,16 @@ int main(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear color buffer and z-buffer.
 
         shaderProgram.useProgram(); //Use program.
+
+        unsigned int modelLoc = glGetUniformLocation(shaderProgram.getProgram(), "model");
+        unsigned int viewLoc = glGetUniformLocation(shaderProgram.getProgram(), "view");
+        unsigned int projectionLoc = glGetUniformLocation(shaderProgram.getProgram(), "projection");
+
+        //Camera uniforms.
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(camera.model));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(camera.view));
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(camera.projection));
+
         ourModel.Draw(shaderProgram);
 
         //Render objects.
@@ -114,7 +133,6 @@ int main(){
         lines.renderLines(camera, lighting);
         
         //cout << zoom << endl;
-
 
         //Swap buffers and get pool events.
         glfwSwapBuffers(window);
