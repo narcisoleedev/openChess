@@ -33,7 +33,7 @@ string glslPath = "/src/glsl/";
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos){}
 
-void handleEvents(GLFWwindow *window, Camera& camera, Lighting& lighting){
+void handleEvents(GLFWwindow *window, Camera& camera){
     
     if(glfwGetKey(window, GLFW_KEY_UP)==GLFW_PRESS){//Move camera below
         camera.view = glm::translate(camera.view, glm::vec3(0.0f, -0.01f, 0.0f));
@@ -83,6 +83,14 @@ int main(){
     glViewport(0, 0, 800, 800);
     glfwSetCursorPosCallback(window, mouse_callback);
 
+    Model ourModel(FileSystem::getPath("resources/objects/backpack/backpack.obj"));
+    VertShader vertexShader(glslPath + "vertexShader.glsl");
+    FragShader fragShader(glslPath + "fragmentShader.glsl");
+    ShaderProgram shaderProgram;
+    shaderProgram.attachShader(vertexShader.compileShader(), fragShader.compileShader());
+    vertexShader.deleteShader();
+    fragShader.deleteShader();
+
     //Init objects.
     Lines lines;
     Cube cube;
@@ -94,16 +102,19 @@ int main(){
     Lighting lighting(0.1f, {1.0f, 0.5f, 1.0f});
 
     while(!glfwWindowShouldClose(window)){
-        handleEvents(window, camera, lighting);    //Handle events.
+        handleEvents(window, camera);    //Handle events.
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);   //Set color buffer to black.
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Clear color buffer and z-buffer.
-        //shaderProgram.useProgram(); //Use program.
+
+        shaderProgram.useProgram(); //Use program.
+        ourModel.Draw(shaderProgram);
 
         //Render objects.
         cube.renderCube(camera, lighting);
         lines.renderLines(camera, lighting);
         
         //cout << zoom << endl;
+
 
         //Swap buffers and get pool events.
         glfwSwapBuffers(window);
