@@ -163,8 +163,7 @@ class Model{
 
                 stbi_image_free(data);
             }
-            else
-            {
+            else{
                 std::cout << "Texture failed to load at path: " << path << std::endl;
                 stbi_image_free(data);
             }
