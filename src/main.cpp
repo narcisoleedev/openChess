@@ -35,7 +35,7 @@ using namespace std;
 
 string glslPath = "/src/glsl/";
 
-char * resourcesPath = "/src/resources/objects/backpack/backpack.obj";
+char * resourcesPath = "src/resources/Chessset.obj";
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos){}
 
@@ -93,8 +93,8 @@ int main(){
 
 
     Model ourModel(resourcesPath);
-    VertShader vertexShader(glslPath + "vertexShader.glsl");
-    FragShader fragShader(glslPath + "fragmentShader.glsl");
+    VertShader vertexShader(glslPath + "vertexShaderModel.glsl");
+    FragShader fragShader(glslPath + "fragmentShaderModel.glsl");
     ShaderProgram shaderProgram;
     shaderProgram.attachShader(vertexShader.compileShader(), fragShader.compileShader());
     vertexShader.deleteShader();
@@ -102,7 +102,7 @@ int main(){
 
     //Init objects.
     Lines lines;
-    Cube cube;
+    //Cube cube;
 
     glEnable(GL_DEPTH_TEST); //Enable z-buffer.
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -129,7 +129,7 @@ int main(){
         ourModel.Draw(shaderProgram);
 
         //Render objects.
-        cube.renderCube(camera, lighting);
+        //cube.renderCube(camera, lighting);
         lines.renderLines(camera, lighting);
         
         //cout << zoom << endl;
@@ -139,8 +139,8 @@ int main(){
         glfwPollEvents();
     }
     //Delete objects and program.
-    cube.deleteCube();
-    lines.deleteLines();
+    //cube.deleteCube();
+    //lines.deleteLines();
 
     //Destroy window and terminate GLFW.
     glfwDestroyWindow(window);

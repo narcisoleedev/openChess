@@ -60,7 +60,6 @@ class FragShader{
                 glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
                 std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
             }
-            cout << fragmentShader << endl;
             return fragmentShader;
         }
         void deleteShader(){

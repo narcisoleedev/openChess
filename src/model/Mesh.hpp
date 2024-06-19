@@ -43,6 +43,7 @@ class Mesh {
     {
         unsigned int diffuseNr = 1;
         unsigned int specularNr = 1;
+        //cout << textures.size() << endl;
         for(unsigned int i = 0; i < textures.size(); i++)
         {
             glActiveTexture(GL_TEXTURE0 + i); // activate texture unit first
@@ -51,7 +52,8 @@ class Mesh {
             string name = textures[i].type;
             if(name == "texture_diffuse") number = std::to_string(diffuseNr++);
             else if(name == "texture_specular") number = std::to_string(specularNr++);
-            glUniform1f(glGetUniformLocation(shader.getProgram(), ("material." + name + number).c_str()), i);
+            //glUniform1f(glGetUniformLocation(shader.getProgram(), ("material." + name + number).c_str()), i);
+            glUniform1f(glGetUniformLocation(shader.getProgram(), (name + number).c_str()), i);
             glBindTexture(GL_TEXTURE_2D, textures[i].id);
         }
         glActiveTexture(GL_TEXTURE0);
