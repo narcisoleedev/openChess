@@ -35,7 +35,7 @@ using namespace std;
 
 string glslPath = "/src/glsl/";
 
-char * resourcesPath = "src/resources/Chessset.obj";
+char * resourcesPath = "src/resources/backpack.obj";
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos){}
 
