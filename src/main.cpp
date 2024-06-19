@@ -35,7 +35,8 @@ using namespace std;
 
 string glslPath = "/src/glsl/";
 
-char * resourcesPath = "src/resources/backpack.obj";
+//char * resourcesPath = "src/resources/backpack.obj";
+char * resourcesPath = "src/resources/Chessset.obj";
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos){}
 
@@ -105,7 +106,7 @@ int main(){
     //Cube cube;
 
     glEnable(GL_DEPTH_TEST); //Enable z-buffer.
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     Camera camera;
     Lighting lighting(0.1f, {1.0f, 0.5f, 1.0f});
@@ -140,7 +141,7 @@ int main(){
     }
     //Delete objects and program.
     //cube.deleteCube();
-    //lines.deleteLines();
+    lines.deleteLines();
 
     //Destroy window and terminate GLFW.
     glfwDestroyWindow(window);
