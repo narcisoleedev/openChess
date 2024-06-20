@@ -106,7 +106,7 @@ int main(){
     Cube cube;
 
     glEnable(GL_DEPTH_TEST); //Enable z-buffer.
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     Camera camera;
     Lighting lighting(0.1f, {0.0f, -1.5f, 10.0f});
