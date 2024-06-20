@@ -11,6 +11,29 @@ The purpose of this project was to actually learn OpenGL and as an avaliation me
 - Assimp
 - stb_image.h (already installed)
 
+### Depedencies:
+```
+        linux-vdso.so.1 (0x00007ffc14be6000)
+        libGL.so.1 => /usr/lib/libGL.so.1 (0x00007d7f0345a000)
+        libX11.so.6 => /usr/lib/libX11.so.6 (0x00007d7f0331c000)
+        libXrandr.so.2 => /usr/lib/libXrandr.so.2 (0x00007d7f0330f000)
+        libXi.so.6 => /usr/lib/libXi.so.6 (0x00007d7f032fb000)
+        libassimp.so.5 => /usr/lib/libassimp.so.5 (0x00007d7f02a00000)
+        libstdc++.so.6 => /usr/lib/libstdc++.so.6 (0x00007d7f02600000)
+        libm.so.6 => /usr/lib/libm.so.6 (0x00007d7f0320d000)
+        libgcc_s.so.1 => /usr/lib/libgcc_s.so.1 (0x00007d7f031e8000)
+        libc.so.6 => /usr/lib/libc.so.6 (0x00007d7f0241e000)
+        libGLdispatch.so.0 => /usr/lib/libGLdispatch.so.0 (0x00007d7f03130000)
+        libGLX.so.0 => /usr/lib/libGLX.so.0 (0x00007d7f029ce000)
+        libxcb.so.1 => /usr/lib/libxcb.so.1 (0x00007d7f029a3000)
+        libXext.so.6 => /usr/lib/libXext.so.6 (0x00007d7f0298e000)
+        libXrender.so.1 => /usr/lib/libXrender.so.1 (0x00007d7f03121000)
+        libz.so.1 => /usr/lib/libz.so.1 (0x00007d7f02974000)
+        /lib64/ld-linux-x86-64.so.2 => /usr/lib64/ld-linux-x86-64.so.2 (0x00007d7f035d8000)
+        libXau.so.6 => /usr/lib/libXau.so.6 (0x00007d7f0311c000)
+        libXdmcp.so.6 => /usr/lib/libXdmcp.so.6 (0x00007d7f0296c000)
+```
+
 ### To do:
 
 #### Camera:
