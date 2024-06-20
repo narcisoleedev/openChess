@@ -11,7 +11,7 @@ The purpose of this project was to actually learn OpenGL and as an avaliation me
 - Assimp
 - stb_image.h (already installed)
 
-### Depedencies:
+### To run the executable you'll need these .so's:
 ```
         linux-vdso.so.1 (0x00007ffc14be6000)
         libGL.so.1 => /usr/lib/libGL.so.1 (0x00007d7f0345a000)
@@ -56,7 +56,7 @@ The purpose of this project was to actually learn OpenGL and as an avaliation me
     - Create cmake file (DONE)
     - Finish README (DONE)
 
-## How to run:
+## How to compile:
 Firstly, since I am using Linux (more specifically Arch btw), you'll need to install some dependencies.
 
 ```
@@ -71,7 +71,7 @@ sudo apt-get install libglfw3 libglfw3-dev libassimp-dev libgl1-mesa-dev libglu1
 
 In case any dependency is missing, feel free to install it.
 
-After that, download and install GLAD, GLFW, GLM and assimp, and make sure to include standard library headers in the system directories (I installed it using AUR packages).
+After that, download and install GLAD, GLFW, GLM and assimp libraries, and make sure to include standard library headers in the system directories (I installed it using AUR packages).
 
 Then after installing these dependencies you can just do that in the system root folder:
 
